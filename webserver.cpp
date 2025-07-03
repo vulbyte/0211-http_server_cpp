@@ -70,10 +70,27 @@ void PromptForHostDir(){
 	if (wants_custom_dir == 0) {return;}
 	cout << "what is the dir?" << endl;
 	cin >> domain;
-	if (domain[domain.size()-1] != '/'){
-		cout << "ADDING / TO DOMAIN";
-		domain += '/';
+	
+	//{{{3 hyper basic formatting
+	/*
+	if(
+		domain[0] != '"'
+	){
+		domain = '"' + domain;
 	}
+	*/
+
+	/*if(
+		domain[domain.size()-1] != '"'
+	){*/
+		if (domain[domain.size()-1] != '/'){
+			cout << "ADDING / TO DOMAIN";
+			domain += '/';
+		}
+		//domain += '"';
+	/*}	*/
+	cout << "formatted domain = " << domain << "\n";
+	//}}}3 hyper basic formatting
 	return;
 }
 /*}}}2*/
@@ -178,7 +195,10 @@ int Write(
 	int newsockfd,
 	struct request_info req
 ){ 
-	char fs [BUFFER_SIZE] = domain;
+	char fs [BUFFER_SIZE];
+	//convert string to char arr
+	strncpy(fs, domain.c_str(), BUFFER_SIZE -1);
+	fs[BUFFER_SIZE -1] = '\0';
 
 	printf("req.uri = '%s' (length: %lu)\n", req.uri, strlen(req.uri));
 	printf("fs = '%s' (length: %lu)\n", fs, strlen(fs));
